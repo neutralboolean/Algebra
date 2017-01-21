@@ -40,7 +40,8 @@ public class VariableUnit{
         var.value = val;
     }
     public double subValue() {
-        return ( coefficient * var.subValue() );
+        //return ( coefficient * ( Math.pow(var.subValue(), exponent ) );
+        return ( coefficient * var.subValue()  );
     }
     
     private char getChar() { return var.getChar(); }
@@ -61,11 +62,15 @@ public class VariableUnit{
      (i.e. that they are the same variable). That task is left to higher
      calls.
      */
+     
+    //adds another VariableUnit to this one.
     public VariableUnit add(VariableUnit other) {
         double temp_coeff = coefficient + other.coefficient;
         VariableUnit result = new VariableUnit(temp_coeff, var.getChar() );
         return result;
     }
+    
+    //subtracts another VariableUnit from this one.
     public VariableUnit subtract(VariableUnit other) {
         double temp_coeff = coefficient - other.coefficient;
         VariableUnit result = new VariableUnit(temp_coeff, var.getChar() );
@@ -90,11 +95,11 @@ public class VariableUnit{
     */
     //helper class to handle the Variable directly
     private class Variable {
-        private double value;
+        private Double value;
         private char var_char;
         
         public Variable(char new_var) {
-            value = 0.0;
+            value = new Double(0.0);
             var_char = new_var;
         }
         /*
@@ -135,6 +140,15 @@ public class VariableUnit{
         }
         System.out.print("y1 is equal to y2: ");
         System.out.println(VariableUnit.equal(y1, y2));
-        System.out.println(y1.add(y2));
+        VariableUnit y3 = y1.add(y2);
+        System.out.println( y3 );
+        
+        y3.assignValue(16.0);
+        System.out.println( y3.subValue() );
+        System.out.println();
+        System.out.println("x = 4");
+        v2.assignValue(4.0);
+        System.out.println(v2 + " = " + v2.subValue());
+        System.out.pritn
     }
 }
