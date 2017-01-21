@@ -1,3 +1,6 @@
+import java.util.ListIterator;
+import java.util.LinkedList;
+
 public class VariableUnit{
     /**
      * Class Variable 
@@ -6,7 +9,7 @@ public class VariableUnit{
      * `VariableUnit`s.
      *  
      **/
-    private double coefficient;
+    private Double coefficient;
     private Variable var;
     //private int exponent;
     //private Equation eqn;
@@ -14,17 +17,27 @@ public class VariableUnit{
     
     //Constructors
     public VariableUnit (double dbl, char new_var) {
-        coefficient = dbl;
+        coefficient = new Double(dbl);
         var = new Variable(new_var);
         //exponent = 1;
         //f_of_g = false;
     }
     
     public VariableUnit (double dbl) {
-        coefficient = dbl;
+        coefficient = new Double(dbl);
         var = null;
     }
     
+    public VariableUnit (char new_var) {
+        if(Character.isLetter(new_var)) {
+            coefficient = new Double(1.0);
+            var = new Variable(new_var);
+        }
+        else {
+            coefficient = new Double(Double.NaN);
+            var = new Variable(new_var);
+        }
+    }
     /*
     //waiting on stable base
     public VariableUnit (double dbl, char new_var, int exp) {
@@ -63,13 +76,20 @@ public class VariableUnit{
     
     public String toString() {
         String result;
+        //if there is a `Variable`
         if (var != null) {
-            //Double temp = new Double(coefficient);
-            result = Double.valueOf(coefficient).toString() + getVariable();
+            //if the `Variable` is an operator
+            if (coefficient.isNaN()) {
+                result = Character.toString(getVariable());
+            }
+            else {
+                result = coefficient.toString() + getVariable();
+            }
         }
         else {
-            result = String.valueOf(coefficient);
+            result = coefficient.toString();
         }
+        
         return result;
     }
     
@@ -161,7 +181,7 @@ public class VariableUnit{
         System.out.print(y1 + " is equal to " + y2 +": ");
         System.out.println(VariableUnit.equal(y1, y2));
         VariableUnit y3 = y1.add(y2);
-        
+        System.out.println("----------------");
         System.out.println( y3 );
         System.out.println("x = 16.0");
         y3.assignValue(16.0);
@@ -174,7 +194,29 @@ public class VariableUnit{
         
         System.out.println("----------------");
         VariableUnit novar = new VariableUnit(5.0);
-        System.out.print("No variable test: ");
+        System.out.print("\'No variable\' printing test: ");
         System.out.println(novar);
+        System.out.println("----------------");
+        System.out.println("\'VariableUnit with mathematical operators\' test");
+        System.out.println("\tPrinting out full equations:");
+        VariableUnit op1 = new VariableUnit('+');
+        VariableUnit op2 = new VariableUnit('-');
+        VariableUnit op3 = new VariableUnit('=');
+        LinkedList<VariableUnit> eqn = new LinkedList<VariableUnit>();
+        eqn.add(v1); eqn.add(op1); eqn.add(v2); eqn.add(op3); eqn.add(y1);
+        ListIterator<VariableUnit> iter = eqn.listIterator(0);
+        while(iter.hasNext()) {
+            System.out.print(iter.next());
+        }
+        System.out.println();
+        
+        eqn.clear();
+        eqn.add(v3); eqn.add(op2); eqn.add(v4); eqn.add(op3); eqn.add(y2);
+        iter = eqn.listIterator(0);
+        while(iter.hasNext()) {
+            System.out.print(iter.next());
+        }
+        System.out.println();
+
     }
 }
