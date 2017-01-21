@@ -20,6 +20,11 @@ public class VariableUnit{
         //f_of_g = false;
     }
     
+    public VariableUnit (double dbl) {
+        coefficient = dbl;
+        var = null;
+    }
+    
     /*
     //waiting on stable base
     public VariableUnit (double dbl, char new_var, int exp) {
@@ -40,18 +45,31 @@ public class VariableUnit{
         var.value = val;
     }
     public double subValue() {
-        return ( coefficient * var.subValue() );
+        //return ( coefficient * ( Math.pow(var.subValue(), exponent ) );
+        return ( coefficient * var.subValue()  );
     }
     
-    private char getChar() { return var.getChar(); }
+    private char getVariable() { return var.getVariable(); }
+    
+    public static boolean sameVariable(VariableUnit one, VariableUnit another) {
+        return ( one.var.getVariable() == another.var.getVariable() );
+    }
     
     public static boolean equal(VariableUnit one, VariableUnit another) {
-        return ( one.var.getChar() == another.var.getChar() );
+        boolean result = (one.coefficient == another.coefficient) &&
+        (sameVariable(one, another));
+        return result;
     }
     
     public String toString() {
-        Double temp = new Double(coefficient);
-        String result = temp.toString() + getChar();
+        String result;
+        if (var != null) {
+            //Double temp = new Double(coefficient);
+            result = Double.valueOf(coefficient).toString() + getVariable();
+        }
+        else {
+            result = String.valueOf(coefficient);
+        }
         return result;
     }
     
@@ -61,14 +79,18 @@ public class VariableUnit{
      (i.e. that they are the same variable). That task is left to higher
      calls.
      */
+     
+    //adds another VariableUnit to this one.
     public VariableUnit add(VariableUnit other) {
         double temp_coeff = coefficient + other.coefficient;
-        VariableUnit result = new VariableUnit(temp_coeff, var.getChar() );
+        VariableUnit result = new VariableUnit(temp_coeff, var.getVariable() );
         return result;
     }
+    
+    //subtracts another VariableUnit from this one.
     public VariableUnit subtract(VariableUnit other) {
         double temp_coeff = coefficient - other.coefficient;
-        VariableUnit result = new VariableUnit(temp_coeff, var.getChar() );
+        VariableUnit result = new VariableUnit(temp_coeff, var.getVariable() );
         return result;
     }
     //waiting on stable base
@@ -76,7 +98,7 @@ public class VariableUnit{
     public VariableUnit multiply(VariableUnit other) {
         double temp_coeff = coefficient * other.coefficient;
         int temp_exp = exponenet + other.exponent;
-        VariableUnit result = new VariableUnit(temp_coeff, var.getChar(), temp_exp );
+        VariableUnit result = new VariableUnit(temp_coeff, var.getVariable(), temp_exp );
         
         return result;
     }
@@ -84,18 +106,18 @@ public class VariableUnit{
     public VariableUnit divide(VariableUnit other) {
         double temp_coeff = coefficient / other.coefficient;
         int temp_exp = exponent - other.exponent;
-        VariableUnit result = new VariableUnit(temp_coeff, var.getChar(), temp_exp);
+        VariableUnit result = new VariableUnit(temp_coeff, var.getVariable(), temp_exp);
         return result;
     }
     */
     //helper class to handle the Variable directly
     private class Variable {
-        private double value;
-        private char var_char;
+        private Double value;
+        private char variable;
         
         public Variable(char new_var) {
-            value = 0.0;
-            var_char = new_var;
+            value = new Double(0.0);
+            variable = new_var;
         }
         /*
         public Variable(Variable new_comp) {
@@ -115,7 +137,7 @@ public class VariableUnit{
             */
         }
         
-        public char getChar() { return var_char; }
+        public char getVariable() { return variable; }
 
     }
     
@@ -133,8 +155,26 @@ public class VariableUnit{
         for (int i = 0; i < array.length; i++) {
             System.out.println(array[i]);
         }
-        System.out.print("y1 is equal to y2: ");
+        System.out.println("----------------");
+        System.out.print(y1 +" has same variable as "+ y2 +": ");
+        System.out.println(VariableUnit.sameVariable(y1, y2));
+        System.out.print(y1 + " is equal to " + y2 +": ");
         System.out.println(VariableUnit.equal(y1, y2));
-        System.out.println(y1.add(y2));
+        VariableUnit y3 = y1.add(y2);
+        
+        System.out.println( y3 );
+        System.out.println("x = 16.0");
+        y3.assignValue(16.0);
+        System.out.println( y3 + " = " + y3.subValue() );
+        
+        System.out.println("----------------");
+        System.out.println("x = 4");
+        v2.assignValue(4.0);
+        System.out.println(v2 + " = " + v2.subValue());
+        
+        System.out.println("----------------");
+        VariableUnit novar = new VariableUnit(5.0);
+        System.out.print("No variable test: ");
+        System.out.println(novar);
     }
 }
